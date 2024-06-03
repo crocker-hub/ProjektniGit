@@ -53,6 +53,13 @@ int main(void) {
 			break;
 
 		case 2:
+			file = fopen("clanovi.bin", "rb");
+			if (file == NULL) {
+				printf("Nije moguce otvoriti datoteku za citanje.\n");
+				return 1;
+			}
+			brojClanova = fread(clanovi, sizeof(struct clan), maksClanova, file);
+			fclose(file);
 			printf("---BRISANJE CLANOVA---\n");
 			if (brojClanova <= 0) {
 				printf("Nema clanova za maknuti!\n");
