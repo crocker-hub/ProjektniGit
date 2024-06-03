@@ -1,4 +1,4 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
 
@@ -9,19 +9,32 @@ struct clan {
 };
 
 void dodajClana(int brojClanova, int maksClanova, struct clan* clanovi, FILE* file) {
-	if (brojClanova > maksClanova) {
-		printf("Dostigli ste maksimalni broj clanova");
-		return 0;
+	if (brojClanova >= maksClanova) {
+		printf("Dostigli ste maksimalni broj clanova\n");
+		return;
 	}
 	else {
 		struct clan noviClan;
 		printf("---DODAVANJE CLANOVA---\n");
-		printf("Unesi ime clana:");
+
+		printf("Unesi ime clana: ");
 		scanf("%s", noviClan.ime);
-		printf("Unesi dob clana(godine)");
-		scanf("%d", &noviClan.dob);
-		printf("Unesi clanarinu clana(mjeseci)\n");
-		scanf("%d", &noviClan.clanarina);
+
+		printf("Unesi dob clana (godine): ");
+		if (scanf("%d", &noviClan.dob) != 1) {
+			printf("Neispravan unos za dob clana. Molimo unesite broj.\n");
+			int c;
+			while ((c = getchar()) != '\n' && c != EOF);
+			return;
+		}
+
+		printf("Unesi clanarinu clana (mjeseci): ");
+		if (scanf("%d", &noviClan.clanarina) != 1) {
+			printf("Neispravan unos za clanarinu clana. Molimo unesite broj.\n");
+			int c;
+			while ((c = getchar()) != '\n' && c != EOF);
+			return;
+		}
 
 		clanovi[brojClanova] = noviClan;
 		brojClanova++;
@@ -31,7 +44,7 @@ void dodajClana(int brojClanova, int maksClanova, struct clan* clanovi, FILE* fi
 		file = fopen("clanovi.bin", "ab");
 		if (file == NULL) {
 			printf("Nije moguce otvoriti datoteku za pisanje.\n");
-			return 1;
+			return;
 		}
 		fwrite(&noviClan, sizeof(struct clan), 1, file);
 		fclose(file);
@@ -43,8 +56,6 @@ void obrisiClana(int brojClanova, int redniBroj, FILE* file, struct clan* clanov
 		printf("Taj clan ne postoji!\n");
 		return -1;
 	}
-
-
 	redniBroj--;
 
 	file = fopen("clanovi.bin", "rb+");
@@ -164,3 +175,4 @@ void prikazClanarina(FILE* file, struct clan* clanovi, int maksClanova, int broj
 		}
 	}
 }
+
