@@ -1,4 +1,4 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
 #include "header.h"
@@ -31,18 +31,18 @@ int main(void) {
 		printf("       |              4.Produzi clanarinu                  |\n");
 		printf("       |     5.Prikazi clanove s obzirom na clanarinu      |\n");
 		printf("       |---------------------------------------------------|\n");
-		scanf("%d", &izbor);
-
-
+		
 		while (1) {
-			if (scanf("%d", &izbor) == 1) {
-				break; 
-			}
-			else {
-				printf("Pogresan unos, probaj unjeti broj.\n");
+			if (scanf("%d", &izbor) != 1) {
+				printf("Neispravan unos. Probaj unjeti broj.\n");
 				while (getchar() != '\n'); 
 			}
+			else {
+				break;
+			}
 		}
+
+		
 
 
 		switch (izbor) {
@@ -61,7 +61,14 @@ int main(void) {
 
 			printf("Upisi redni broj clana kojeg zelis maknuti: \n");
 			scanf("%d", &redniBroj);
-			obrisiClana(brojClanova, redniBroj, file, clanovi);
+			if (scanf("%d", &redniBroj) != 1) {
+				printf("Probaj upisati broj clana.\n");
+				
+			}
+			else {
+				obrisiClana(brojClanova, redniBroj, file, clanovi);
+			}
+			
 			break;
 
 		case 3:
