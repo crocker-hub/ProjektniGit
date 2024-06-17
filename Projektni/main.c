@@ -3,7 +3,7 @@
 #include <string.h>
 #include "header.h"
 
-struct clan {
+typedef struct clan {
 	char ime[30];
 	int dob;       //u godinama
 	int clanarina; //u mjesecima
@@ -11,26 +11,31 @@ struct clan {
 
 int main(void) {
 	int izbor;
-	int brojClanova = 0, maksClanova = 100;
-	struct clan clanovi[100];
+	int brojClanova = 0;
+	static int maksClanova = 100;
+	struct clan* clanovi = NULL;
+	clanovi = (struct clan*)malloc(maksClanova * sizeof(struct clan));
+	if (clanovi == NULL) {
+		printf("Neuspjela alokacija memorije.\n");
+		return 1;
+	}
 	int produzivanje = 0, redniBroj = 0;
-
 	FILE* file;
 	file = fopen("clanovi.bin", "ab");
 	if (file == NULL) {
-		printf("file se ne moze otvoriti");
+		printf("file se ne moze otvoriti. Error: %s\n", strerror(errno));
 		return 1;
 	}
 
 	do {
 		system("cls");
-		printf("       |-------------------Gym Manager---------------------|\n");
-		printf("       |                 1.Dodaj clana                     |\n");
-		printf("       |                 2.Makni clana                     |\n");
-		printf("       |               3.Prikazi clanove                   |\n");
-		printf("       |              4.Produzi clanarinu                  |\n");
-		printf("       |     5.Prikazi clanove s obzirom na clanarinu      |\n");
-		printf("       |---------------------------------------------------|\n");
+		printf("                      |-------------------Gym Manager---------------------|\n");
+		printf("                      |                 1.Dodaj clana                     |\n");
+		printf("                      |                 2.Makni clana                     |\n");
+		printf("                      |               3.Prikazi clanove                   |\n");
+		printf("                      |              4.Produzi clanarinu                  |\n");
+		printf("                      |     5.Prikazi clanove s obzirom na clanarinu      |\n");
+		printf("                      |---------------------------------------------------|\n");
 		
 		while (1) {
 			if (scanf("%d", &izbor) != 1) {
@@ -55,7 +60,7 @@ int main(void) {
 		case 2:
 			file = fopen("clanovi.bin", "rb");
 			if (file == NULL) {
-				printf("Nije moguce otvoriti datoteku za citanje.\n");
+				printf("Nije moguce otvoriti datoteku za citanje. Error: %s\n", strerror(errno));
 				return 1;
 			}
 			brojClanova = fread(clanovi, sizeof(struct clan), maksClanova, file);
@@ -67,7 +72,6 @@ int main(void) {
 			}
 
 			printf("Upisi redni broj clana kojeg zelis maknuti: \n");
-			scanf("%d", &redniBroj);
 			if (scanf("%d", &redniBroj) != 1) {
 				printf("Probaj upisati broj clana.\n");
 				
@@ -81,7 +85,7 @@ int main(void) {
 		case 3:
 			file = fopen("clanovi.bin", "rb");
 			if (file == NULL) {
-				printf("Nije moguce otvoriti datoteku za citanje.\n");
+				printf("Nije moguce otvoriti datoteku za citanje. Error: %s\n", strerror(errno));
 				return 1;
 			}
 			brojClanova = fread(clanovi, sizeof(struct clan), maksClanova, file);
@@ -96,7 +100,7 @@ int main(void) {
 			break;
 
 		case 4:
-			produziClanarinu(redniBroj, brojClanova, clanovi, produzivanje, file);
+			produziClanarinu(redniBroj, brojClanova, clanovi, produzivanje, file, maksClanova);
 			break;
 
 		case 5:
@@ -113,5 +117,6 @@ int main(void) {
 
 	} while (izbor != 1 || izbor != 2 || izbor != 3 || izbor != 4 || izbor != 5);
 
+	free(clanovi);
 	return 1;
 }
