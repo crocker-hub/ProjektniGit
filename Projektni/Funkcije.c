@@ -3,16 +3,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+#include "header.h"
 
-struct clan {
-	char ime[30];
-	int dob;       //u godinama
-	int clanarina; //u mjesecima
-};
+
 
 
 void dodajClana(int brojClanova, int maksClanova, struct clan* clanovi, FILE* file) {
-	
+
 	if (brojClanova >= maksClanova) {
 		printf("Dostigli ste maksimalni broj clanova\n");
 		return;
@@ -23,9 +20,9 @@ void dodajClana(int brojClanova, int maksClanova, struct clan* clanovi, FILE* fi
 
 		printf("Unesi ime clana: ");
 		scanf("%29s", noviClan.ime);
-		
 
-		
+
+
 
 		printf("Unesi dob clana (godine): ");
 		if (scanf("%d", &noviClan.dob) != 1 || noviClan.dob >= 100 || noviClan.dob <= 0) {
@@ -198,4 +195,3 @@ void prikazClanarina(FILE* file, struct clan* clanovi, int maksClanova, int broj
 		}
 	}
 }
-
