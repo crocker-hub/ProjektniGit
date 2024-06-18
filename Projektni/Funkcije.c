@@ -93,17 +93,15 @@ void obrisiClana(int brojClanova, int redniBroj, FILE* file, struct clan* clanov
 }
 
 void sortirajClanove(struct clan* clanovi, int brojClanova) {
-	struct clan temp;
-	for (int i = 0; i < brojClanova - 1; i++) {
-		for (int j = i + 1; j < brojClanova; j++) {
-			if (clanovi[i].clanarina < clanovi[j].clanarina) {
-				temp = clanovi[i];
-				clanovi[i] = clanovi[j];
-				clanovi[j] = temp;
-			}
-		}
-	}
+	qsort(clanovi, brojClanova, sizeof(struct clan), usporedi);
+
 }
+int usporedi(const void* a, const void* b) {
+	Clan* clanA = (Clan*)a;
+	Clan* clanB = (Clan*)b;
+	return clanB->clanarina - clanA->clanarina;
+}
+
 
 void produziClanarinu(int redniBroj, int brojClanova, struct clan* clanovi, int produzivanje, FILE* file, int maksClanova) {
 	file = fopen("clanovi.bin", "rb");
@@ -111,18 +109,23 @@ void produziClanarinu(int redniBroj, int brojClanova, struct clan* clanovi, int 
 		printf("Nije moguce otvoriti datoteku za citanje. Error: %s\n", strerror(errno));
 		return;
 	}
+
 	brojClanova = fread(clanovi, sizeof(struct clan), maksClanova, file);
 	fclose(file);
+
+
 	printf("---PRODUZIVANJE CLANARINE---\n");
 	printf("Upisi broj clana kojem zelis produziti clanarinu: ");
 	if (scanf("%d", &redniBroj) != 1) {
 		printf("Probaj upisati broj clana.\n");
 		return;
 	}
+
 	if (redniBroj < 1 || redniBroj > brojClanova || clanovi[redniBroj - 1].ime[0] == '\0') {
 		printf("Neispravan broj clana.\n");
 		return;
 	}
+
 	printf("Za koliko mjeseci zelis clanu %d produziti clanarinu: ", redniBroj);
 	if (scanf("%d", &produzivanje) != 1 || produzivanje >= 120 || produzivanje <= 0) {
 		printf("Neispravan unos za clanarinu clana. Molimo unesite broj.\n");
@@ -130,6 +133,8 @@ void produziClanarinu(int redniBroj, int brojClanova, struct clan* clanovi, int 
 		while ((c = getchar()) != '\n' && c != EOF);
 		return;
 	}
+
+
 	clanovi[redniBroj - 1].clanarina += produzivanje;
 	printf("Clanarina clana %d produzena za %d mjeseci!\n", redniBroj, produzivanje);
 	file = fopen("clanovi.bin", "rb+");
@@ -137,6 +142,8 @@ void produziClanarinu(int redniBroj, int brojClanova, struct clan* clanovi, int 
 		printf("Nije moguce otvoriti datoteku za pisanje. Error: %s\n", strerror(errno));
 		return;
 	}
+
+
 	fseek(file, (redniBroj - 1) * sizeof(struct clan), SEEK_SET);
 	fwrite(&clanovi[redniBroj - 1], sizeof(struct clan), 1, file);
 	fclose(file);
@@ -170,6 +177,7 @@ void prikazClanarina(FILE* file, struct clan* clanovi, int maksClanova, int broj
 		printf("Nije moguce otvoriti datoteku za citanje. Error: %s\n", strerror(errno));
 		return;
 	}
+
 	brojClanova = fread(clanovi, sizeof(struct clan), maksClanova, file);
 	fclose(file);
 
@@ -181,17 +189,7 @@ void prikazClanarina(FILE* file, struct clan* clanovi, int maksClanova, int broj
 	sortirajClanove(clanovi, brojClanova);
 
 	printf("                    ---PRIKAZ SORTIRANIH CLANOVA---\n");
-	for (i = 0; i < brojClanova; i++) {
-		if (clanovi[i].ime[0] != '\0') {
-			printf("                    ----------\n");
-			printf("                    |Broj clana: %d\n", i + 1);
-			printf("                    |Ime: %s\n", clanovi[i].ime);
-			if (clanovi[i].dob != 0) {
-				printf("                    |Dob clana(godine): %d \n", clanovi[i].dob);
-			}
-			if (clanovi[i].clanarina != 0) {
-				printf("                    |Clanarina(mjeseci): %d \n", clanovi[i].clanarina);
-			}
-		}
+	for (int i = 0; i < brojClanova; i++) {
+		printf("Ime: %s, Dob: %d, Clanarina: %d\n", clanovi[i].ime, clanovi[i].dob, clanovi[i].clanarina);
 	}
 }
