@@ -3,11 +3,7 @@
 #include <string.h>
 #include "header.h"
 
-typedef struct clan {
-	char ime[30];
-	int dob;       //u godinama
-	int clanarina; //u mjesecima
-};
+
 
 int main(void) {
 	int izbor;
@@ -36,18 +32,18 @@ int main(void) {
 		printf("                      |              4.Produzi clanarinu                  |\n");
 		printf("                      |     5.Prikazi clanove s obzirom na clanarinu      |\n");
 		printf("                      |---------------------------------------------------|\n");
-		
+
 		while (1) {
 			if (scanf("%d", &izbor) != 1) {
 				printf("Neispravan unos. Probaj unjeti broj.\n");
-				while (getchar() != '\n'); 
+				while (getchar() != '\n');
 			}
 			else {
 				break;
 			}
 		}
 
-		
+
 
 
 		switch (izbor) {
@@ -74,12 +70,12 @@ int main(void) {
 			printf("Upisi redni broj clana kojeg zelis maknuti: \n");
 			if (scanf("%d", &redniBroj) != 1) {
 				printf("Probaj upisati broj clana.\n");
-				
+
 			}
 			else {
 				obrisiClana(brojClanova, redniBroj, file, clanovi);
 			}
-			
+
 			break;
 
 		case 3:
