@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "header.h"
+#include <stdlib.h>
+#include <windows.h>
 
 
 
@@ -15,9 +17,12 @@ int main(void) {
 		printf("Neuspjela alokacija memorije.\n");
 		return 1;
 	}
+
 	int produzivanje = 0, redniBroj = 0;
+
 	FILE* file;
 	file = fopen("clanovi.bin", "ab");
+	
 	if (file == NULL) {
 		printf("file se ne moze otvoriti. Error: %s\n", strerror(errno));
 		return 1;
@@ -103,6 +108,7 @@ int main(void) {
 			prikazClanarina(file, clanovi, maksClanova, brojClanova);
 			break;
 
+		
 
 
 		default:
