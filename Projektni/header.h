@@ -2,6 +2,13 @@
 #include <stdio.h>
 #include <string.h>
 
+
+typedef struct clan {
+	char ime[30];
+	int dob;       //u godinama
+	int clanarina; //u mjesecima
+};
+
 void dodajClana(int brojClanova, int maksClanova, struct clan* clanovi, FILE* file);
 void obrisiClana(int brojClanova, int redniBroj, FILE* file, struct clan* clanovi);
 void sortirajClanove(struct clan* clanovi, int brojClanova);
