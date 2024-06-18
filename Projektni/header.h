@@ -8,3 +8,11 @@ void sortirajClanove(struct clan* clanovi, int brojClanova);
 void produziClanarinu(int redniBroj, int brojClanova, struct clan* clanovi, int produzivanje, FILE* file, int maksClanova);
 void pokaziClanove(int brojClanova, struct clan* clanovi);
 void prikazClanarina(FILE* file, struct clan* clanovi, int maksClanova, int brojClanova);
+
+#ifndef GLOBALS_H
+#define GLOBALS_H
+
+extern int brojClanova;
+extern int maksClanova;
+
+#endif
